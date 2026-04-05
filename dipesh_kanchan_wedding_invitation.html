@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a0a00; font-family: 'Noto Sans Devanagari', sans-serif; }
+
+  .card-outer {
+    max-width: 780px;
+    margin: 0 auto;
+    background: linear-gradient(145deg, #2d0f00, #1a0800, #2a0e00);
+    border: 2px solid #c8862a;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .border-pattern {
+    position: absolute;
+    top: 8px; left: 8px; right: 8px; bottom: 8px;
+    border: 1px solid rgba(200,134,42,0.4);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .corner {
+    position: absolute;
+    width: 60px; height: 60px;
+    z-index: 3;
+  }
+  .corner svg { width: 100%; height: 100%; }
+  .c-tl { top: 8px; left: 8px; }
+  .c-tr { top: 8px; right: 8px; transform: scaleX(-1); }
+  .c-bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+  .c-br { bottom: 8px; right: 8px; transform: scale(-1); }
+
+  .floral-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: radial-gradient(ellipse 3px 8px at 15% 20%, #c8862a 50%, transparent 50%),
+      radial-gradient(ellipse 3px 8px at 85% 20%, #c8862a 50%, transparent 50%),
+      radial-gradient(ellipse 3px 8px at 15% 80%, #c8862a 50%, transparent 50%),
+      radial-gradient(ellipse 3px 8px at 85% 80%, #c8862a 50%, transparent 50%);
+  }
+
+  .page { padding: 40px 50px; position: relative; z-index: 1; }
+
+  /* PAGE 1 - Cover */
+  .cover { text-align: center; padding: 50px 50px 40px; }
+  .ganesh-icon { font-size: 42px; margin-bottom: 8px; filter: sepia(1) saturate(3) hue-rotate(10deg); }
+  .shubh-vivah {
+    font-family: 'Noto Sans Devanagari', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: #f0c060;
+    text-shadow: 0 0 30px rgba(240,192,96,0.4);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .date-line {
+    font-size: 20px;
+    color: #e8b84a;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+  .divider {
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #c8862a, transparent);
+    margin: 0 auto 28px;
+  }
+  .couple-names {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 10px;
+  }
+  .groom-name {
+    font-family: 'Noto Sans Devanagari', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: #f5d080;
+    text-align: right;
+    padding-right: 24px;
+    line-height: 1.2;
+  }
+  .ampersand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-style: italic;
+    color: #c8862a;
+    padding: 0 8px;
+    line-height: 1;
+  }
+  .bride-name {
+    font-family: 'Noto Sans Devanagari', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: #f5d080;
+    text-align: left;
+    padding-left: 24px;
+    line-height: 1.2;
+  }
+  .subtitle-couple {
+    font-size: 14px;
+    color: rgba(200,134,42,0.7);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 30px;
+  }
+  .couple-illustration {
+    font-size: 80px;
+    margin: 10px 0 20px;
+    line-height: 1;
+  }
+
+  .sender-box {
+    background: rgba(200,134,42,0.1);
+    border: 1px solid rgba(200,134,42,0.3);
+    border-radius: 4px;
+    padding: 14px 20px;
+    text-align: left;
+    display: inline-block;
+    min-width: 300px;
+    margin-top: 10px;
+  }
+  .sender-label { font-size: 12px; color: rgba(200,134,42,0.6); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .sender-name { font-size: 18px; color: #f0c060; font-weight: 600; margin-bottom: 4px; }
+  .sender-addr { font-size: 13px; color: rgba(240,192,96,0.7); line-height: 1.6; }
+
+  /* Section divider */
+  .section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c8862a 20%, #f0c060 50%, #c8862a 80%, transparent);
+    margin: 0;
+  }
+
+  /* PAGE 2 - Events */
+  .page2 { padding: 40px 50px; }
+  .mangal-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .om-symbol { color: #f0c060; font-size: 22px; }
+  .ganesh-invocation {
+    font-size: 13px;
+    color: rgba(240,192,96,0.6);
+    font-style: italic;
+    margin: 6px 0 14px;
+    line-height: 1.8;
+  }
+  .mangal-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: #f0c060;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .events-grid {
+    margin: 24px 0;
+    border: 1px solid rgba(200,134,42,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .event-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 0.9fr;
+    gap: 0;
+    border-bottom: 1px solid rgba(200,134,42,0.15);
+    align-items: center;
+  }
+  .event-row:last-child { border-bottom: none; }
+  .event-row.header {
+    background: rgba(200,134,42,0.2);
+  }
+  .event-cell {
+    padding: 10px 14px;
+    font-size: 14px;
+    color: rgba(240,192,96,0.85);
+    border-right: 1px solid rgba(200,134,42,0.15);
+  }
+  .event-cell:last-child { border-right: none; }
+  .event-row.header .event-cell {
+    font-weight: 600;
+    color: #f0c060;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .event-name { font-weight: 500; color: #f5d080; }
+  .time-cell { color: #c8862a; font-weight: 500; }
+
+  .ashirwad-box {
+    background: rgba(200,134,42,0.12);
+    border: 1.5px solid #c8862a;
+    border-radius: 6px;
+    padding: 20px 24px;
+    text-align: center;
+    margin: 24px 0;
+    position: relative;
+  }
+  .ashirwad-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #f0c060;
+    margin-bottom: 8px;
+  }
+  .ashirwad-date {
+    font-size: 16px;
+    color: #f5d080;
+    margin-bottom: 6px;
+  }
+  .ashirwad-venue {
+    font-size: 15px;
+    color: rgba(240,192,96,0.8);
+    line-height: 1.5;
+  }
+
+  .note-box {
+    background: rgba(200,134,42,0.08);
+    border-left: 3px solid #c8862a;
+    padding: 12px 16px;
+    margin-top: 20px;
+    border-radius: 0 4px 4px 0;
+  }
+  .note-text {
+    font-size: 13px;
+    color: rgba(240,192,96,0.75);
+    line-height: 1.7;
+  }
+  .note-text strong { color: #f0c060; font-weight: 500; }
+
+  /* PAGE 3 - Main Invitation */
+  .page3 { padding: 40px 50px; }
+  .invocation {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(200,134,42,0.5);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .main-shlok {
+    text-align: center;
+    font-size: 13px;
+    color: rgba(240,192,96,0.6);
+    font-style: italic;
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .intro-text {
+    text-align: center;
+    font-size: 15px;
+    color: rgba(240,192,96,0.75);
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  .couple-detail {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 30px;
+  }
+  .person-card {
+    background: rgba(200,134,42,0.08);
+    border: 1px solid rgba(200,134,42,0.25);
+    border-radius: 6px;
+    padding: 18px;
+    text-align: center;
+  }
+  .person-title-prefix {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(200,134,42,0.6);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .person-main-name {
+    font-size: 28px;
+    font-weight: 600;
+    color: #f0c060;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .person-lineage {
+    font-size: 13px;
+    color: rgba(240,192,96,0.7);
+    line-height: 1.7;
+  }
+  .person-lineage span { color: rgba(200,134,42,0.6); font-size: 11px; display: block; margin-bottom: 2px; letter-spacing: 1px; }
+  .sang-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 30px;
+  }
+  .sang-icon { font-size: 32px; }
+  .sang-text { font-size: 18px; color: #c8862a; font-style: italic; font-family: 'Cormorant Garamond', serif; }
+  .mangal-parinay {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .parinay-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #f0c060;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .parinay-invite-text {
+    font-size: 14px;
+    color: rgba(240,192,96,0.75);
+    line-height: 1.7;
+  }
+
+  .people-section {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .people-col {
+    background: rgba(200,134,42,0.07);
+    border: 1px solid rgba(200,134,42,0.2);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .people-col-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #c8862a;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(200,134,42,0.2);
+    text-align: center;
+  }
+  .people-list {
+    font-size: 12px;
+    color: rgba(240,192,96,0.7);
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .special-requests {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .req-box {
+    border: 1px solid rgba(200,134,42,0.25);
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+  }
+  .req-label { font-size: 10px; color: rgba(200,134,42,0.6); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .req-names { font-size: 12px; color: rgba(240,192,96,0.8); line-height: 1.6; }
+
+  .uttarakanshi {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(200,134,42,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .uttarakanshi-text { font-size: 13px; color: rgba(240,192,96,0.7); line-height: 1.7; }
+  .uttarakanshi-label { font-size: 11px; color: rgba(200,134,42,0.6); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* Nav tabs */
+  .nav {
+    display: flex;
+    background: #0f0500;
+    border-bottom: 1px solid rgba(200,134,42,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-tab {
+    flex: 1;
+    padding: 14px 8px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(200,134,42,0.5);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+  }
+  .nav-tab:hover { color: #c8862a; }
+  .nav-tab.active { color: #f0c060; border-bottom-color: #f0c060; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page.active { animation: fadeIn 0.4s ease; }
+</style>
+</head>
+<body>
+<div class="card-outer">
+  <div class="border-pattern"></div>
+
+  <!-- Corner ornaments -->
+  <div class="corner c-tl">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 5 L55 5 L55 15 L15 15 L15 55 L5 55 Z" fill="none" stroke="#c8862a" stroke-width="1"/>
+      <circle cx="10" cy="10" r="3" fill="#c8862a"/>
+      <path d="M20 5 Q20 20 5 20" fill="none" stroke="rgba(200,134,42,0.4)" stroke-width="0.8"/>
+      <path d="M30 5 Q30 30 5 30" fill="none" stroke="rgba(200,134,42,0.2)" stroke-width="0.6"/>
+    </svg>
+  </div>
+  <div class="corner c-tr">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 5 L55 5 L55 15 L15 15 L15 55 L5 55 Z" fill="none" stroke="#c8862a" stroke-width="1"/>
+      <circle cx="10" cy="10" r="3" fill="#c8862a"/>
+      <path d="M20 5 Q20 20 5 20" fill="none" stroke="rgba(200,134,42,0.4)" stroke-width="0.8"/>
+    </svg>
+  </div>
+  <div class="corner c-bl">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 5 L55 5 L55 15 L15 15 L15 55 L5 55 Z" fill="none" stroke="#c8862a" stroke-width="1"/>
+      <circle cx="10" cy="10" r="3" fill="#c8862a"/>
+    </svg>
+  </div>
+  <div class="corner c-br">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5 5 L55 5 L55 15 L15 15 L15 55 L5 55 Z" fill="none" stroke="#c8862a" stroke-width="1"/>
+      <circle cx="10" cy="10" r="3" fill="#c8862a"/>
+    </svg>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav">
+    <div class="nav-tab active" onclick="showPage(0)">🙏 निमंत्रण</div>
+    <div class="nav-tab" onclick="showPage(1)">📅 कार्यक्रम</div>
+    <div class="nav-tab" onclick="showPage(2)">💐 विवरण</div>
+  </div>
+
+  <!-- PAGE 1: Cover -->
+  <div class="page active" id="page-0">
+    <div class="cover">
+      <div class="ganesh-icon">🕉️</div>
+      <div class="shubh-vivah">शुभ विवाह</div>
+      <div class="date-line">रविवार, 19 अप्रैल 2026</div>
+      <div class="divider"></div>
+      <div class="couple-illustration">🌺</div>
+      <div class="couple-names">
+        <div class="groom-name">दिपेश</div>
+        <div class="ampersand">&</div>
+        <div class="bride-name">कंचन</div>
+      </div>
+      <div style="height:10px"></div>
+      <div class="subtitle-couple">Mangal Parinayotsav</div>
+      <div class="divider"></div>
+
+      <div style="margin-top: 24px; text-align:center;">
+        <div style="font-size:13px; color: rgba(200,134,42,0.6); letter-spacing:2px; text-transform:uppercase; margin-bottom:14px;">Sent by</div>
+        <div class="sender-box">
+          <div class="sender-label">प्रेषक</div>
+          <div class="sender-name">सुरेश कुमार पारीक</div>
+          <div class="sender-addr">भीम कॉलोनी, आर.टी.ओ. ऑफिस रोड़<br>राधाकिशनपुरा, सीकर (राज.)<br>मो. 9529564178, 7733891082</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Events -->
+  <div class="page" id="page-1">
+    <div class="page2">
+      <div class="mangal-header">
+        <div class="om-symbol">॥ श्री गणेशाय नमः॥</div>
+        <div class="ganesh-invocation">
+          विघ्न हरण मंगल करण गणनायक गणराज ।<br>
+          प्रथम निमंत्रण आपकी पूर्ण करियो काज ॥
+        </div>
+        <div class="mangal-title">
+          <span style="color:#c8862a">᳐</span>
+          ॥ मांगलिक कार्यक्रम ॥
+          <span style="color:#c8862a">᳐</span>
+        </div>
+      </div>
+
+      <div class="events-grid">
+        <div class="event-row header">
+          <div class="event-cell">कार्यक्रम</div>
+          <div class="event-cell">दिनांक</div>
+          <div class="event-cell">समय</div>
+        </div>
+        <div class="event-row">
+          <div class="event-cell event-name">श्री गणेश पूजन</div>
+          <div class="event-cell">बुधवार, 15 अप्रैल 2026</div>
+          <div class="event-cell time-cell">प्रातः 11:15 बजे</div>
+        </div>
+        <div class="event-row">
+          <div class="event-cell event-name">हल्द हाथ (बान)</div>
+          <div class="event-cell">शनिवार, 18 अप्रैल 2026</div>
+          <div class="event-cell time-cell">प्रातः 8:15 बजे</div>
+        </div>
+        <div class="event-row">
+          <div class="event-cell event-name">चाक-भात</div>
+          <div class="event-cell">शनिवार, 18 अप्रैल 2026</div>
+          <div class="event-cell time-cell">दोपहर 01:15 बजे</div>
+        </div>
+        <div class="event-row">
+          <div class="event-cell event-name">निकासी</div>
+          <div class="event-cell">शनिवार, 18 अप्रैल 2026</div>
+          <div class="event-cell time-cell">सायं 7:15 बजे</div>
+        </div>
+        <div class="event-row" style="background: rgba(200,134,42,0.08);">
+          <div class="event-cell event-name" style="color:#f0c060">पाणिग्रहण संस्कार</div>
+          <div class="event-cell" style="color:#f0c060">रविवार, 19 अप्रैल 2026</div>
+          <div class="event-cell time-cell" style="color:#f0c060">रात्रि शुभ लग्नानुसार</div>
+        </div>
+      </div>
+
+      <div class="ashirwad-box">
+        <div style="font-size:11px; letter-spacing:3px; color:rgba(200,134,42,0.6); text-transform:uppercase; margin-bottom:10px;">✦ आशीर्वाद समारोह ✦</div>
+        <div class="ashirwad-date">गुरुवार, 23 अप्रैल 2026 (सायं 6:15 बजे से)</div>
+        <div class="ashirwad-venue">
+          <div style="font-size:18px; color:#f0c060; font-weight:600; margin: 8px 0 4px;">होटल मिलन प्राईम</div>
+          <div>रेल्वे स्टेशन के पास, सीकर</div>
+        </div>
+      </div>
+
+      <div class="note-box">
+        <div class="note-text">
+          <strong>नोट:</strong> बारात 19 अप्रैल 2026 को प्रातः 9:15 बजे राधाकिशनपुरा, सीकर से ब्रज भूमि वैडिंग पार्टी लॉन, सिकन्दपुर, भीपुरा हिण्डन एयरपोर्ट साहिबाबाद, गाजियाबाद के लिए प्रस्थान करेगी।
+        </div>
+      </div>
+
+      <div style="margin-top:24px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div class="people-col">
+          <div class="people-col-title">ननिहाल पक्ष</div>
+          <div class="people-list">
+            नानीजी-नानाजी<br>
+            स्व. श्रीमती मनोहरी देवी<br>
+            स्व. श्री मोहनलाल जी<br>
+            मामी जी – शारदा देवी<br>
+            बाबूलाल जी<br>
+            संगीता देवी-अशोक जी<br>
+            मीना देवी-किशन जी<br>
+            पार्वती देवी-विजय जी
+          </div>
+        </div>
+        <div class="people-col">
+          <div class="people-col-title">फूफा पक्ष</div>
+          <div class="people-list">
+            शकुन्तला देवी-स्व. श्री रामावतार जी<br>
+            गीता देवी-स्व. श्री रमेश जी<br>
+            गायत्री देवी-श्री भानुप्रकाश जी<br>
+            सावित्री देवी-श्री अशोक जी<br>
+            सरिता देवी-श्री राजेश जी<br>
+            संगीता देवी-श्री संजय जी<br>
+            रंजना देवी-श्री गिरधारी जी<br>
+            रीना देवी-श्री अभिषेक जी
+          </div>
+        </div>
+        <div class="people-col">
+          <div class="people-col-title">जंवाई पक्ष</div>
+          <div class="people-list">
+            दीपिका-श्री कपिल जी<br><br>
+            <span style="color:#c8862a; font-size:10px">मौसी-मौसा जी</span><br>
+            श्रीमती श्रवणी देवी<br>
+            श्री ओमप्रकाश जी<br>
+            श्रीमती विमला देवी<br>
+            श्री पुरूषोत्तम जी<br>
+            वासुदेवी-स्व. श्री महावीर जी
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Detail -->
+  <div class="page" id="page-2">
+    <div class="page3">
+      <div class="invocation">
+        <span>॥ श्री पितृदेवाय नमः॥</span>
+        <span>॥ श्री गणेशाय नमः॥</span>
+        <span>॥ श्री कुलदेवी नमः॥</span>
+      </div>
+      <div class="main-shlok">
+        ॐ वक्रतुण्ड महाकाय सूर्य कोटि समप्रभः ।<br>
+        निर्विघ्नं कुरुमे देव सर्व कार्येषु सर्वदा ॥
+      </div>
+      <div class="intro-text">
+        स्नेही स्वजन,<br>
+        परमपिता परमेश्वर की असीम अनुकम्पा से
+      </div>
+
+      <div class="couple-detail">
+        <div class="person-card">
+          <div class="person-title-prefix">आयुष्मान्</div>
+          <div class="person-main-name">दिपेश</div>
+          <div class="person-lineage">
+            <span>सुपौत्र</span>
+            स्व. श्रीमती श्यामसुन्दरी<br>
+            स्व. श्री भंवरलाल जी पारीक
+            <span style="margin-top:8px">सुपुत्र</span>
+            श्रीमती मंजू देवी<br>
+            श्री सुरेश कुमार पारीक
+            <span style="margin-top:8px">निवासी</span>
+            धोद (सीकर)
+          </div>
+        </div>
+        <div class="sang-center">
+          <div class="sang-icon">🪗</div>
+          <div class="sang-text">संग</div>
+          <div style="width:1px; height:30px; background: rgba(200,134,42,0.3); margin: 8px auto;"></div>
+          <div class="mangal-parinay">
+            <div class="parinay-title">॥ मंगल परिणयोत्सव ॥</div>
+            <div class="parinay-invite-text">
+              की मधुर बेला पर वर-वधु को<br>शुभाशीर्वाद प्रदान करने हेतु<br>
+              <span style="color:#f0c060">आप सादर आमंत्रित हैं।</span>
+            </div>
+          </div>
+        </div>
+        <div class="person-card">
+          <div class="person-title-prefix">आयुष्मति</div>
+          <div class="person-main-name">कंचन</div>
+          <div class="person-lineage">
+            <span>सुपौत्री</span>
+            स्व. श्रीमती चाँदमुनी देवी<br>
+            स्व. श्री तपेश्वर जी
+            <span style="margin-top:8px">सुपुत्री</span>
+            श्रीमती सुनिता देवी<br>
+            श्री धर्मवीर जी
+            <span style="margin-top:8px">निवासी</span>
+            दिल्ली
+          </div>
+        </div>
+      </div>
+
+      <div class="special-requests">
+        <div class="req-box">
+          <div class="req-label">विशेष आग्रह</div>
+          <div class="req-names">नितेश, निर्भ्रल, मोहित</div>
+        </div>
+        <div class="req-box">
+          <div class="req-label">स्वागतकर्ता</div>
+          <div class="req-names">सुभाष, नरेश, अंकुर, गौरव</div>
+        </div>
+        <div class="req-box">
+          <div class="req-label">बाल आग्रह</div>
+          <div class="req-names">अक्षत, चीन्न</div>
+        </div>
+      </div>
+
+      <div class="people-col" style="margin-top:16px;">
+        <div class="people-col-title">दर्शनाभिलाषी</div>
+        <div class="people-list" style="font-size:13px;">
+          बनवारीलाल, श्यामसुन्दर, विनोद, पवन, महेश, महावीर, दिनेश, जुगल<br>
+          नरेन्द्र, महेन्द्र, राजेन्द्र, शंकरलाल, सुनील, अरविन्द, अभिषेक<br>
+          राहुल, प्रदीप, सैन्टी एवं समस्त पाण्डिया परिवार
+        </div>
+      </div>
+
+      <div class="uttarakanshi">
+        <div>
+          <div class="uttarakanshi-label">उत्तराकांक्षी</div>
+          <div class="uttarakanshi-text">
+            मदनलाल-नन्दकिशोर पारीक<br>
+            मु.पो. धोद, जिला-सीकर (राज.)<br>
+            मो. 9529564178, 7733891082
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px; color:rgba(200,134,42,0.5); letter-spacing:1px; margin-bottom:8px;">— WITH BLESSINGS —</div>
+          <div style="font-size:28px">🌸</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPage(n) {
+  document.querySelectorAll('.page').forEach((p,i) => {
+    p.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.nav-tab').forEach((t,i) => {
+    t.classList.toggle('active', i === n);
+  });
+}
+</script>
+</body>
+</html>
